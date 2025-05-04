@@ -10,7 +10,7 @@ datasource db {
 
 model Form{
   id Int @id @default(autoincrement())
-  ownerID Int
+  ownerID String
   createdAt DateTime @default(now())
   published Boolean @default(false)
   content Json

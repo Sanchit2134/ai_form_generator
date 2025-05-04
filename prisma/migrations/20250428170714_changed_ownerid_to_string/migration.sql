@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "Form" ALTER COLUMN "ownerID" SET DATA TYPE TEXT;

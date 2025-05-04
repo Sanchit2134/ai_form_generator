@@ -38,7 +38,7 @@ const HeroSection = () => {
       <div className='grid grid-cols-4 gap-4'>
       {
         SuggestionBtnText.map((item: SuggestionText,index:number)=>(
-          <Button onClick={()=>setText(item.text)} className='rounded-full h-10' variant={'outline'}>{item.label}</Button>
+          <Button key={index} onClick={()=>setText(item.text)} className='rounded-full h-10' variant={'outline'}>{item.label}</Button>
         ))
       }
       </div>
