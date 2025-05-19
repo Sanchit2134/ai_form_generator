@@ -1,19 +1,16 @@
 'use server';
-
 import prisma from '@/lib/prisma';
 import { currentUser } from '@clerk/nextjs/server';
 import { z } from 'zod';
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { revalidatePath } from 'next/cache';
-// import { Prisma } from '@prisma/client';
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
 
 function stripMarkdownCodeBlock(text: string): string {
-  // Remove `````` or `````` wrappers and trim whitespace
-  return text.replace(/``````/i, '$1')
-             .replace(/``````/i, '$1')
-             .trim();
+  return text
+    .replace(/```(?:json)?/gi, '')
+    .trim();
 }
 
 export async function generateForm(prevState: unknown, formData: FormData) {
@@ -37,14 +34,24 @@ export async function generateForm(prevState: unknown, formData: FormData) {
 
     const description = result.data.description;
 
-    const prompt = `Create a JSON form with the following fields:
-- title
-- fields (if any field includes options, keep it inside an array, not an object)
-- button
-
-IMPORTANT: Output ONLY the JSON. Do NOT use Markdown formatting or any commentary.`;
-
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-pro-latest" });
+    const prompt = `Generate a JSON response for a form with the following structure. Ensure the keys and format remain constant in every response.
+{
+  "formFields": [        // An array of fields in the form
+    {
+      "label": "string", // The label to display for the field
+      "name": "string",  // The unique identifier for the field (used for form submissions)
+      "placeholder": "string" // The placeholder text for the field
+    }
+  ],
+   "formTitle": "string", // The title of the form
+   
+Requirements:
+- Use only the given keys: "formTitle", "formFields", "label", "name", "placeholder".
+- Always include at least 3 fields in the "formFields" array.
+- Keep the field names consistent across every generation for reliable rendering.
+- Provide meaningful placeholder text for each field based on its label.
+        `;
+    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
     const completion = await model.generateContent(prompt);
     const response = await completion.response;
     const formContent = response.text();
@@ -74,10 +81,8 @@ IMPORTANT: Output ONLY the JSON. Do NOT use Markdown formatting or any commentar
     });
 
     console.log('Form saved:', savedForm);
+    revalidatePath('/dashboard/forms/edit/[formId]');  // Optionally revalidate path if needed
     return { success: true, message: 'Form generated successfully', data: savedForm };
-
-    // Optionally revalidate path if needed
-    revalidatePath('/dashboard/forms/edit/[formId]');
 
   } catch (error) {
     console.error('Error generating form:', error);

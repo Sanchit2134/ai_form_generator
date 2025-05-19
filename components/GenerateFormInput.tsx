@@ -35,7 +35,7 @@ const GenerateFormInput: React.FC<{text?:string}> = ({text}) => {
     if(state.success){
       console.log("response -->",state.data)
       toast(state.message)
-      router.push(`/dashboard/forms/${state.data.id}`) //id ko use karke mujhe form ka page kholna hai
+      router.push(`/dashboard/forms/edit/${state.data.id}`) //id ko use karke mujhe form ka page kholna hai
     } else if(state.message){
       toast.error(state.message)
     }

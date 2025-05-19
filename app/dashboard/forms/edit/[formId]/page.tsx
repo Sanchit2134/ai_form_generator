@@ -1,34 +1,32 @@
-import React from 'react'
-import prisma from '@/lib/prisma'
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
-import AiGeneratedForm from '@/components/AiGeneratedForm';
-import { any } from 'zod';
+import AiGeneratedForm from "@/components/AiGeneratedForm";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import prisma from "@/lib/prisma"; 
+import React from "react";
 
-const Edit = async ({params}:{params:Promise<{formId:string}>}) => {
+const Edit = async ({ params }: { params: Promise<{ formId: string }> }) => {
   const formId = (await params).formId;
-  console.log('Form ID:', formId)
-  if(!formId) {
-    return <h1>No form id found for id {formId}</h1>
+
+  if (!formId) {
+    return <h1>No form id found for id {formId}</h1>;
   }
-  const form = await prisma.form.findUnique({
+  const form : any = await prisma.form.findUnique({
     where: {
-      id: Number(formId)
-    }
-  })
-  console.log('Form->',typeof form)
-  const formContent = typeof form?.content === 'string' ? JSON.parse(form.content) : form?.content;
+      id: Number(formId),
+    },
+  });
+ 
   return (
     <Card>
       <CardHeader>
         <CardTitle>
-          {formContent?.title ? formContent.title : 'No title found'}
+          <h1 className="font-bold text-2xl text-center">{form.content.formTitle || "NA"}</h1>
         </CardTitle>
-        <CardContent>
-          <AiGeneratedForm form={form} isEditMode={true}/>
-        </CardContent>
       </CardHeader>
+      <CardContent>
+        <AiGeneratedForm form = {form} isEditMode={true}/>
+      </CardContent>
     </Card>
-  )
-}
+  );
+};
 
-export default Edit
+export default Edit;
