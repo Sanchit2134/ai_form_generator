@@ -9,7 +9,9 @@ const page = async() => {
   console.log("data--->", data)
 
   return (
-    <div><Analytics/></div>
+    <div>
+      <Analytics />
+    </div>
   )
 }
 

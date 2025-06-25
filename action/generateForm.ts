@@ -13,7 +13,7 @@ function stripMarkdownCodeBlock(text: string): string {
     .trim();
 }
 
-export async function generateForm(prevState: unknown, formData: FormData) {
+export async function generateForm(prevState: unknown, formData: FormData) {     //prevState --> waha se empty object baijainge taki iske andar hum kuch message dal sake 
   try {
     const user = await currentUser();
     if (!user) {

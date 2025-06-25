@@ -59,8 +59,8 @@ const GenerateFormInput: React.FC<{text?:string}> = ({text}) => {
 }
 export default GenerateFormInput
 
-const SubmitButton = ()=>{
-  const {pending} = useFormStatus()
+const SubmitButton = ()=>{  // this function helps to disable the button when the form is pending. It returns an object with pending property which is true when the form is being submitted.
+  const {pending} = useFormStatus() // useFormStatus hook is used to get the status of the form submission simple way mai bolte toh button manage karne ka  kaam kar raha hai. user not able to click the button when the form is pending. Pending is true when the form is being submitted, pending is false when the form is not being submitted. 
   return(
     <Button disabled={pending} className='h-12 bg-gradient-to-r from-blue-500 to-purple-600'>
       <Sparkles className='mr-2'/>

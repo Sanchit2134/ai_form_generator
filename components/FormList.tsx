@@ -35,7 +35,7 @@ const FormList: React.FC<Props> = ({ form }) => {
         <CardContent>
           <Link href={`/dashboard/forms/${form.id}/submission`}><Button variant={'link'} className='text-blue-600'>Submission-{form.submission}</Button></Link>
         </CardContent>
-        <CardFooter className='flex justify-center'>
+        <CardFooter className='flex justify-end gap-2'>
           <Button variant='outline'>
             <Edit2/> Edit
           </Button>
